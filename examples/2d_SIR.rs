@@ -2,11 +2,10 @@ use bevy::prelude::*;
 use bevy_life::{CellState, CellularAutomatonPlugin, MooreCell2d, SimulationBatch};
 use rand::Rng;
 
-#[derive(Debug, Copy, Clone, Eq, PartialEq, Component)]
+#[derive(Debug, Copy, Clone, PartialEq, Component)]
 pub enum SIR {
-    S,
+    S(f32),
     I,
-    R,
 }
 
 impl CellState for SIR {
@@ -15,9 +14,9 @@ impl CellState for SIR {
         let mut rng = rand::thread_rng();
 
         match (self, rng.gen_range(0.0..=1.0)) {
-            (Self::R, x) if x < 0.05 => Self::S,
-            (Self::I, x) if x < 0.5 => Self::R,
-            (Self::S, x) if x < (0.25 * count as f32) => Self::I,
+            (Self::I, x) if x < 0.5 => Self::S(0.0),
+            (Self::S(s), x) if x < (*s * 0.4 * count as f32) => Self::I,
+            (Self::S(s), _) => Self::S(*s + 0.015 * (1.0 - *s)),
             _ => *self
         }
     }
@@ -65,9 +64,8 @@ fn spawn_map(commands: &mut Commands) {
             for y in 0..=size_y {
                 for x in 0..=size_x {
                     let state = match rng.gen_range(0.0..=1.0) {
-                        x if x < 0.1 => Some(SIR::R),
                         x if x < 0.15 => Some(SIR::I),
-                        x if x < 0.8 => Some(SIR::S),
+                        x if x < 0.8 => Some(SIR::S(rng.gen_range(0.0..=1.0))),
                         _ => None,
                     };
                     if let Some(state) = state {
@@ -101,8 +99,7 @@ pub fn color_sprites(
     query
         .par_iter_mut()
         .for_each(|(state, mut sprite)| match state {
-            SIR::S => sprite.color = Color::DARK_GREEN,
+            SIR::S(s) => sprite.color = Color::rgb(0., *s * 0.8, 0.),
             SIR::I => sprite.color = Color::RED,
-            SIR::R => sprite.color = Color::DARK_GRAY,
         });
 }
