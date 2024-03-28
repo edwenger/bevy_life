@@ -1,7 +1,7 @@
 use bevy::prelude::Component;
 use std::{fmt::Debug, hash::Hash};
 #[cfg(feature = "2D")]
-pub use {hexagon_2d_cell::*, moore_2d_cell::*, neumann_2d_cell::*};
+pub use {hexagon_2d_cell::*, moore_2d_cell::*, neumann_2d_cell::*, complex_2d_cell::*};
 #[cfg(feature = "3D")]
 pub use {moore_3d_cell::*, neumann_3d_cell::*};
 
@@ -9,6 +9,8 @@ pub use {moore_3d_cell::*, neumann_3d_cell::*};
 mod hexagon_2d_cell;
 #[cfg(feature = "2D")]
 mod moore_2d_cell;
+#[cfg(feature = "2D")]
+mod complex_2d_cell;
 #[cfg(feature = "3D")]
 mod moore_3d_cell;
 #[cfg(feature = "2D")]

@@ -1,5 +1,5 @@
 use bevy::prelude::*;
-use bevy_life::{CellState, CellularAutomatonPlugin, MooreCell2d, SimulationBatch};
+use bevy_life::{CellState, CellularAutomatonPlugin, MooreCell2d, ComplexCell2d, SimulationBatch};
 use rand::Rng;
 
 #[derive(Debug, Copy, Clone, PartialEq, Component)]
@@ -32,7 +32,8 @@ fn main() {
             }),
             ..default()
         }))
-        .add_plugins(CellularAutomatonPlugin::<MooreCell2d, SIR>::default())
+        // .add_plugins(CellularAutomatonPlugin::<MooreCell2d, SIR>::default())
+        .add_plugins(CellularAutomatonPlugin::<ComplexCell2d, SIR>::default())
         .insert_resource(SimulationBatch)
         .add_systems(Startup, (setup_camera, setup_map))
         .add_systems(Update, color_sprites)
@@ -83,7 +84,8 @@ fn spawn_map(commands: &mut Commands) {
                                 ),
                                 ..default()
                             },
-                            MooreCell2d::new(IVec2::new(x, y)),
+                            // MooreCell2d::new(IVec2::new(x, y)),
+                            ComplexCell2d::new(IVec2::new(x, y)),
                             state,
                         ));
                     }
@@ -100,6 +102,6 @@ pub fn color_sprites(
         .par_iter_mut()
         .for_each(|(state, mut sprite)| match state {
             SIR::S(s) => sprite.color = Color::rgb(0., *s * 0.8, 0.),
-            SIR::I => sprite.color = Color::RED,
+            SIR::I => sprite.color = Color::CYAN, // CYAN, ORANGE_RED
         });
 }
