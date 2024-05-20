@@ -26,6 +26,7 @@ features = ["bevy_render"]
 
 [dev-dependencies]
 rand = "0.8"
+rand_distr = "0.4"
 
 [dev-dependencies.bevy]
 version = "0.13"
@@ -86,4 +87,9 @@ required-features = ["2D"]
 [[example]]
 name = "2d_SIR"
 path = "examples/2d_SIR.rs"
+required-features = ["2D"]
+
+[[example]]
+name = "2d_SIR_cohort"
+path = "examples/2d_SIR_cohort.rs"
 required-features = ["2D"]

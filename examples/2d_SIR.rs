@@ -52,7 +52,7 @@ fn setup_map(mut commands: Commands) {
 fn spawn_map(commands: &mut Commands) {
     let mut rng = rand::thread_rng();
     let (size_x, size_y) = (600, 400);
-    let sprite_size = 2.;
+    let sprite_size = 8.;
     let color = Color::rgba(0., 0., 0., 0.);
 
     commands
@@ -73,7 +73,7 @@ fn spawn_map(commands: &mut Commands) {
                         builder.spawn((
                             SpriteBundle {
                                 sprite: Sprite {
-                                    custom_size: Some(Vec2::splat(sprite_size)),
+                                    custom_size: Some(Vec2::splat(sprite_size*rng.gen_range(0.0..=1.0))),
                                     color,
                                     ..default()
                                 },
